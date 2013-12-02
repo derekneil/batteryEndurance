@@ -51,25 +51,21 @@ baseURL='http://web.cs.dal.ca/~dneil/battery.php'
 while read line           
 do           
     url=${baseURL}\?entry=$line
-    curl -s ${url} > /dev/null
+    response=$(curl --write-out %{http_code} --silent --output /dev/null $url )
 
     #unsuccessfull, save back to another file
-    if [ ${?} == 1 ]; then
+    if [ "$response" != "200" ]; then
     	echo $line >> .batteryHistoryNotUploaded
     fi
 
 done < .batteryHistoryToUpload
 
 `rm .batteryHistoryToUpload`
-`touch .batteryHistoryToUpload`
 
 remaining=".batteryHistoryNotUploaded"
 if [ -e "$remaining" ]; then #if .batteryHistoryNotUploaded file exists
-	`mv .batteryHistoryNotUploaded .batteryHistoryToUpload`
+	`mv -f $remaining .batteryHistoryToUpload`
 fi
-
-#make sure permissions are set correctly for file
-`chmod 644 .batteryHistoryToUpload`
 
 #save date and cycle to check on next run
 echo $current > .batteryScriptLastRun
