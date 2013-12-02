@@ -1,29 +1,27 @@
 <?php include("htmltop.php") ?>
 
 <?php
-  // http://www.test.com/battery.php?entry=2013,11,25,19,55,8833,8440,6,1000
-  if( isset($_GET['entry']) )//&& $_GET['key'])
-  {
-    //validate api key
+  // http://www.test.com/battery.php?entry=2013,11,25,19,55,8833,8440,6,1000?apikey=a5b1c3d2
 
-    //parse data
-    $entry = $_GET['entry'];
-    $entries = explode("," , $entry);
+  //require API key
+  if( $_GET['apikey'] && file_exists(".key") ){
+    if( strpos(file_get_contents(".key"),$_GET['apikey']) !== false) {
 
-    //validate input before saving to local file
-    if( count($entries) == 9 ){
-      // TODO: clean up any trailing comma or new line return for the entry?
-      file_put_contents("batteryHistory.csv" , PHP_EOL.$entry, FILE_APPEND);
+      //api key matches, process the entry
+      if( isset($_GET['entry']) ){
+        $entry = $_GET['entry'];
+        $entries = explode("," , $entry);
+
+        //validate input before saving to local file
+        if( count($entries) == 9 ){
+          // TODO: clean up any trailing comma or new line return for the entry?
+          file_put_contents("batteryHistory.csv" , PHP_EOL.$entry, FILE_APPEND);
+
+          //clear url to make sure duplicate data isn't submitted if someone just types something in a browser
+
+        }
+      }
     }
-    else {
-      ?> <b> _GET[entry] must be exactly 9 csv values!</b> yours was <? echo count($entries)?><br>
-      <pre> <?
-      print_r($_GET);
-      ?> </pre><br> <?
-    }
-
-    //clear url to make sure duplicate data isn't submitted if someone just types something in a browser
-
   }
 
 ?>
