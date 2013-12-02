@@ -40,7 +40,7 @@ fi
 # TODO: there might be a faster way to get this info
 date=`date +"20%y,%m,%d,%H,%M"`
 entry=${date}\,`/usr/sbin/ioreg -w0 -l | grep -E '\"MaxCapacity\"|\"DesignCapacity\"'  | cut -d " " -f19 | tr '\r\n' ',' | rev | cut -c 2- | rev`
-entry=${entry}\,`/usr/sbin/ioreg -w0 -l | grep -E '\"CycleCount\"|\"DesignCycleCount'  | cut -d " " -f19 | tr '\r\n' ',' | rev | cut -c 2- | rev`
+entry=${entry}\,${cycle}\,`/usr/sbin/ioreg -w0 -l | grep \"DesignCycleCount  | cut -d " " -f19`
 
 
 #save to file for batch processing if you haven't been online in a while
@@ -48,9 +48,10 @@ echo $entry >> .batteryHistoryToUpload
 
 #try to upload file contents to api
 baseURL='http://web.cs.dal.ca/~dneil/battery.php'
+key=apikey=`cat .batteryapikey`
 while read line           
 do           
-    url=${baseURL}\?entry=$line
+    url=${baseURL}\?entry=$line\&$key
     response=$(curl --write-out %{http_code} --silent --output /dev/null $url )
 
     #unsuccessfull, save back to another file
