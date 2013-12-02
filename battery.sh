@@ -1,6 +1,32 @@
 #!/bin/bash
 #track the battery life of macbookpro over time
 
+function tryUpload () {
+
+	#try to upload file contents to api
+	baseURL='http://web.cs.dal.ca/~dneil/battery.php'
+	key=apikey=`cat .batteryapikey`
+
+	while read line           
+	do           
+	    url=${baseURL}\?entry=$line\&$key
+	    response=$(curl --write-out %{http_code} --silent --output /dev/null $url )
+
+	    #unsuccessfull, save back to another file
+	    if [ "$response" != "200" ]; then
+	    	echo $line >> .batteryHistoryNotUploaded
+	    fi
+
+	done < .batteryHistoryToUpload
+
+	`rm .batteryHistoryToUpload`
+
+	remaining=".batteryHistoryNotUploaded"
+	if [ -e "$remaining" ]; then #if .batteryHistoryNotUploaded file exists
+		`mv -f $remaining .batteryHistoryToUpload`
+	fi
+}
+
 #schedule script to see if it should fully run
 #cron every 30 minutes
 # 0-59/30 * * * * ~/.battery.sh
@@ -22,6 +48,10 @@ else
 		#run script
 		:
 	else
+		remaining=".batteryHistoryToUpload"
+		if [ -e "$remaining" ]; then #if .batteryHistoryNotUploaded file exists
+			tryUpload
+		fi
 		exit 0
 	fi
 fi
@@ -42,31 +72,10 @@ date=`date +"20%y,%m,%d,%H,%M"`
 entry=${date}\,`/usr/sbin/ioreg -w0 -l | grep -E '\"MaxCapacity\"|\"DesignCapacity\"'  | cut -d " " -f19 | tr '\r\n' ',' | rev | cut -c 2- | rev`
 entry=${entry}\,${cycle}\,`/usr/sbin/ioreg -w0 -l | grep \"DesignCycleCount  | cut -d " " -f19`
 
-
 #save to file for batch processing if you haven't been online in a while
 echo $entry >> .batteryHistoryToUpload
 
-#try to upload file contents to api
-baseURL='http://web.cs.dal.ca/~dneil/battery.php'
-key=apikey=`cat .batteryapikey`
-while read line           
-do           
-    url=${baseURL}\?entry=$line\&$key
-    response=$(curl --write-out %{http_code} --silent --output /dev/null $url )
-
-    #unsuccessfull, save back to another file
-    if [ "$response" != "200" ]; then
-    	echo $line >> .batteryHistoryNotUploaded
-    fi
-
-done < .batteryHistoryToUpload
-
-`rm .batteryHistoryToUpload`
-
-remaining=".batteryHistoryNotUploaded"
-if [ -e "$remaining" ]; then #if .batteryHistoryNotUploaded file exists
-	`mv -f $remaining .batteryHistoryToUpload`
-fi
+tryUpload
 
 #save date and cycle to check on next run
 echo $current > .batteryScriptLastRun
