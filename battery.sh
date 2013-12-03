@@ -40,7 +40,7 @@ if [ ! -e "$last" ]; then #if last run time file doesn't exist
 else 
 	lastRun=`cat $last`
 	IFS=',' read -ra lastRun <<< "$lastRun"
-	newdate=`expr $date - 18` #must be at least 18 hours later to run based on time
+	newdate=`expr $date - 11` #must be at least X hours later to run based on time
 	if [ "$newdate" -gt "${lastRun[0]}" ]; then #if last run time more than X hours ago
 		#run script
 		:
