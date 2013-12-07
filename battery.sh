@@ -73,6 +73,7 @@ entry=${date}\,`/usr/sbin/ioreg -w0 -l | grep -E '\"MaxCapacity\"|\"DesignCapaci
 entry=${entry}\,${cycle}\,`/usr/sbin/ioreg -w0 -l | grep \"DesignCycleCount  | cut -d " " -f19`
 
 #save to file for batch processing if you haven't been online in a while
+echo $entry >> .batteryHistory.csv
 echo $entry >> .batteryHistoryToUpload
 
 tryUpload
