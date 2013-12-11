@@ -1,4 +1,4 @@
-![SCREENSHOTS](https://raw.github.com/derekneil/battery/master/battery.png "Battery Graph")
+![SCREENSHOTS](https://raw.github.com/derekneil/batteryEndurance/master/battery.png "Battery Graph")
 
 ##Local
 Place the battery script in your ~/ home dir.
