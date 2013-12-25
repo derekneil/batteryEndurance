@@ -21,9 +21,17 @@
           //clear url to make sure duplicate data isn't submitted if someone just types something in a browser
 
         }
+        else
+          echo "entry not formatted properly";
       }
+      else
+        echo "no entry to process";
     }
+    else
+      echo "no apikey match";
   }
+  else
+      echo "no apikey file found";
 
 ?>
 
