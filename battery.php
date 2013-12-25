@@ -5,7 +5,8 @@
 
   //require API key
   if( isset($_GET['apikey']) && file_exists("./.batteryapikey") ){
-    if( strpos(file_get_contents("./.batteryapikey"),$_GET['apikey']) !== false) {
+    if( strcmp( trim( file_get_contents( "./.batteryapikey"), "\t\n\r\0\x0B" )
+                ,$_GET['apikey'] ) == 0) {
 
       //api key matches, process the entry
       if( isset($_GET['entry']) ){
