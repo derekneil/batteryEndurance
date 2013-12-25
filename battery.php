@@ -1,7 +1,7 @@
 <?php include("htmltop.php") ?>
 
 <?php
-  // http://www.test.com/battery.php?entry=2013,11,25,19,55,8833,8440,6,1000?apikey=a5b1c3d2
+  // http://www.test.com/battery.php?entry=2013,11,25,19,55,8833,8440,6,1000&apikey=a5b1c3d2
 
   //require API key
   if( isset($_GET['apikey']) && file_exists("./.batteryapikey") ){
