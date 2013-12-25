@@ -1,11 +1,12 @@
 <?php include("htmltop.php") ?>
 
 <?php
-  // http://www.test.com/battery.php?entry=2013,11,25,19,55,8833,8440,6,1000?apikey=a5b1c3d2
+  // http://www.test.com/battery.php?entry=2013,11,25,19,55,8833,8440,6,1000&apikey=a5b1c3d2
 
   //require API key
   if( isset($_GET['apikey']) && file_exists("./.batteryapikey") ){
-    if( strpos(file_get_contents("./.batteryapikey"),$_GET['apikey']) !== false) {
+    if( strcmp( trim( file_get_contents( "./.batteryapikey"), "\t\n\r\0\x0B" )
+                ,$_GET['apikey'] ) == 0) {
 
       //api key matches, process the entry
       if( isset($_GET['entry']) ){
@@ -23,7 +24,6 @@
       }
     }
   }
-
 ?>
 
     <title>Battery</title> 
