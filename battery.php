@@ -144,7 +144,7 @@
       </div>
     </div><!-- e: content -->
 
-    <p>Battery capacity and cycles over time. Unfortunately, as of this writing, this chart can only display <b>1,000</b> data points per data series, hopefully they fix that in the next year and a half.</p>
-    <p>Code will be available on bitbucket and github shortly.</p>
+    <p>Bash, PHP and javascript micro project to upload my battery cycles and mAh over time for a new laptop. Rudamentary apikey implementation as well as cached offline history if PHP script doesn't respond to current curl call. Unfortunately, as of this writing, this chart can only display <b>1,000</b> data points per data series, hopefully they fix that in the next year and a half.</p>
+    <p>Code is available on <a href="https://bitbucket.org/derek_neil/batteryendurance/">bitbucket</a> and <a href="https://github.com/derekneil/batteryEndurance/">github</a>.</p>
 
 <?php include("footer.php") ?>
