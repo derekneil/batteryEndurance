@@ -111,6 +111,10 @@
 
               // Split the lines
               var lines = data.split('\n');
+              var maxLength = 1000;
+              if (lines.length > maxLength) {
+                lines = lines.slice(lines.length-maxLength, lines.length);
+              }
 
               // Iterate over the lines and add categories or series
               $.each(lines, function(lineNo, line) {
@@ -144,7 +148,7 @@
       </div>
     </div><!-- e: content -->
 
-    <p>Bash, PHP and javascript micro project to upload my battery cycles and mAh over time for a new laptop. Rudamentary apikey implementation as well as cached offline history if PHP script doesn't respond to current curl call. Unfortunately, as of this writing, this chart can only display <b>1,000</b> data points per data series, hopefully they fix that in the next year and a half.</p>
+    <p>Bash, PHP and javascript micro project to upload my battery cycles and mAh over time for a new laptop. Rudamentary apikey implementation as well as cached offline history if PHP script doesn't respond to current curl call. Modified to only display <b>1,000</b> data points per data series, based on highcharts limitation, maybe i'll use something fanicer in the future.</p>
     <p>Code is available on <a href="https://bitbucket.org/derek_neil/batteryendurance/">bitbucket</a> and <a href="https://github.com/derekneil/batteryEndurance/">github</a>.</p>
 
 <?php include("footer.php") ?>
