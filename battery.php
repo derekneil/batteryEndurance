@@ -42,6 +42,9 @@
       (function($){ // encapsulate jQuery
         $(function () {
           
+          var designCapacity = 8440;
+          var EOLCapacity = designCapacity * 0.8;
+
           //define all the options for the chart
           var options = {
               chart: {
@@ -61,16 +64,18 @@
                         return this.value ;
                     },
                     style: {
-                        color: '#9c2d02'
+                        color: '#9c0371'
                     } 
                   },
                   title: {
                       text: 'Cycles',
                       style: {
-                        color: '#9c2d02'
-                    } 
+                        color: '#9c0371'
+                    },
                   },
-                  opposite: true
+                  opposite: true,
+                  min: 0,
+                  max: 1000
               },{
                   labels: {
                     formatter: function() {
@@ -85,18 +90,50 @@
                       style: {
                         color: '#03719c'
                     }
-                  }
+                  },
+                  plotLines: [{
+                      color: '#0495ce',
+                      dashStyle: 'Dash',
+                      width: 3,
+                      label: {
+                        text: 'Design Capacity',
+                        style: {
+                          color: '#0495ce'
+                        },
+                        y: 20
+                      }, 
+                      value: designCapacity,
+                      zIndex: 5
+                  },{
+                      color: '#024d6a',
+                      dashStyle: 'Dash',
+                      width: 3,
+                      label: {
+                        text: 'End of Life Capacity',
+                        style: {
+                          color: '#024d6a'
+                        },
+                        y: -5
+                      }, 
+                      value: EOLCapacity,
+                      zIndex: 5
+                  }],
+                  min: EOLCapacity,
+                  max: Math.ceil(designCapacity/1000)*1000
               }],
               tooltip: {
                   shared: true,
                   borderWidth: 0,
               },
               legend: {enabled:false},
+              plotOptions:{
+                  series:{turboThreshold:5000}
+              },
               credits: {enabled:false},
               series: [{
                       name: 'Cycles',
                       yAxis: 0, //this is very important!
-                      color: '#9c2d02',
+                      color: '#9c0371',
                       data: []
                   }, {
                       name: 'Capacity',
@@ -111,10 +148,6 @@
 
               // Split the lines
               var lines = data.split('\n');
-              var maxLength = 1000;
-              if (lines.length > maxLength) {
-                lines = lines.slice(lines.length-maxLength, lines.length);
-              }
 
               // Iterate over the lines and add categories or series
               $.each(lines, function(lineNo, line) {
@@ -148,7 +181,7 @@
       </div>
     </div><!-- e: content -->
 
-    <p>Bash, PHP and javascript micro project to upload my battery cycles and mAh over time for a new laptop. Rudamentary apikey implementation as well as cached offline history if PHP script doesn't respond to current curl call. Modified to only display <b>1,000</b> data points per data series, based on highcharts limitation, maybe i'll use something fanicer in the future.</p>
+    <p>Bash, PHP and javascript micro project to upload my battery cycles and mAh over time for a new laptop. Rudamentary apikey implementation as well as cached offline history if PHP script doesn't respond to current curl call. Modified to display more than <b>1,000</b> data points per data series using highcharts plotOptions: series: turboThreshold:NEW_MAX api option.</p>
     <p>Code is available on <a href="https://bitbucket.org/derek_neil/batteryendurance/">bitbucket</a> and <a href="https://github.com/derekneil/batteryEndurance/">github</a>.</p>
 
 <?php include("footer.php") ?>
